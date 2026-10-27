@@ -1,0 +1,36 @@
+﻿찾을 표현,바꿀 표현
+\b(?:overwhelming|intense|extreme|unbearable|desperate|uncontrollable|all-consuming|fanatical|pathological)\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|shaking|trembling)\b),
+\b(?:ever-growing|deepening|increasing|mounting|growing|intensifying)\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|bond|intimacy)\b),
+\bobsession with\b,interest in
+\bobsessed with\b,interested in
+\bobsession\b,interest
+\bobsessive attachment\b,attachment
+\bobsessive\b,interested
+\bfixated on\b,interested in
+\bfixation on\b,interest in
+\bfixation\b,interest
+\bpossessive of\b,attached to
+\bpossessive feelings\b,attachment
+\bpossessive desire\b,attachment
+\bpossessiveness\b,attachment
+\bdesire to monopolize\b,desire for closeness
+\bdesire for dominance\b,desire to lead
+\bneed for control\b,desire to influence events
+\bdesire to control\b,desire to influence
+\breluctant submission\b,reluctant compliance
+\bsubmission to\b,compliance with
+\bsubmission\b,compliance
+\bsubmissive attitude\b,cooperative attitude
+\bsurrendered to\b,yielded to
+\bact of surrender\b,act of yielding
+\bcoercive attitude\b,firm attitude
+\bcoercive atmosphere\b,tense atmosphere
+\bcoercive dynamic\b,tense interaction
+\bcoercively\b,forcefully
+\bbrooded over\b,thought about
+\brare moment of honesty\b,honest conversation
+\bpatient observation\b,observation
+\bprotective instinct\b,concern
+\bpower struggle\b,difference of opinion
+\bdeepening bond\b,bond
+\bgrowing intimacy\b,intimacy

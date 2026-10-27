@@ -1,0 +1,75 @@
+﻿찾을 표현,바꿀 표현
+(?:깊어지는|커져가는|강해지는|심해지는)\s*집착,애착
+(?:걷잡을 수 없는|주체할 수 없는|억누를 수 없는|참을 수 없는|극심한|강렬한|압도적인|격렬한|과도한|지나친|맹목적인|광적인|병적인)\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|집착심|소유욕|독점욕|지배욕|통제욕|떨림)\b),
+(?:점점|갈수록|더욱|한층)\s*(?:깊어지는|커지는|커져가는|강해지는|심해지는)\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|소유욕|독점욕|지배욕|통제욕)\b),
+집착에 사로잡힌,관심을 가진
+집착에 사로잡혀,관심을 가지고
+집착하지 않았다,관심을 갖지 않았다
+집착하지 않는,관심을 갖지 않는
+집착했다,관심을 가졌다
+집착하는,관심을 갖는
+집착하며,관심을 가지며
+집착하려,관심을 가지려
+집착하다,관심을 갖다
+집착심,관심
+집착,관심
+소유욕,애착
+독점욕,함께 있고 싶은 마음
+지배욕,주도하려는 마음
+통제욕,관여하려는 마음
+통제하려,관여하려
+강압적으로,강하게
+강압적인,강한
+복종했다,요구에 응했다
+복종하는,요구에 응하는
+복종하며,요구에 응하며
+복종하다,요구에 응하다
+복종,요구에 응함
+굴복했다,요구를 따랐다
+굴복하는,요구를 따르는
+굴복하며,요구를 따르며
+굴복하다,요구를 따르다
+굴복,요구를 따름
+강박적으로,반복해서
+강박적인,지나치게 신경 쓰는
+경외심,존경심
+숭배심,존경심
+보호 본능,보호하려는 마음
+인내심 있게 지켜봤다,지켜봤다
+권력 다툼,의견 차이
+신뢰의 첫걸음,신뢰를 보인 행동
+\b(?:overwhelming|intense|extreme|unbearable|desperate|uncontrollable|all-consuming|fanatical|pathological)\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|shaking|trembling)\b),
+\b(?:ever-growing|deepening|increasing|mounting|growing|intensifying)\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|bond|intimacy)\b),
+\bobsession with\b,interest in
+\bobsessed with\b,interested in
+\bobsession\b,interest
+\bobsessive attachment\b,attachment
+\bobsessive\b,interested
+\bfixated on\b,interested in
+\bfixation on\b,interest in
+\bfixation\b,interest
+\bpossessive of\b,attached to
+\bpossessive feelings\b,attachment
+\bpossessive desire\b,attachment
+\bpossessiveness\b,attachment
+\bdesire to monopolize\b,desire for closeness
+\bdesire for dominance\b,desire to lead
+\bneed for control\b,desire to influence events
+\bdesire to control\b,desire to influence
+\breluctant submission\b,reluctant compliance
+\bsubmission to\b,compliance with
+\bsubmission\b,compliance
+\bsubmissive attitude\b,cooperative attitude
+\bsurrendered to\b,yielded to
+\bact of surrender\b,act of yielding
+\bcoercive attitude\b,firm attitude
+\bcoercive atmosphere\b,tense atmosphere
+\bcoercive dynamic\b,tense interaction
+\bcoercively\b,forcefully
+\bbrooded over\b,thought about
+\brare moment of honesty\b,honest conversation
+\bpatient observation\b,observation
+\bprotective instinct\b,concern
+\bpower struggle\b,difference of opinion
+\bdeepening bond\b,bond
+\bgrowing intimacy\b,intimacy

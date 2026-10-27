@@ -3,7 +3,7 @@
   "version": 1,
   "config": {
     "name": "Chat Summary Calibrator",
-    "version": "0.6.8",
+    "version": "0.6.10",
     "description": "일반 Chat Summary 수동·자동 요약 및 규칙 기반 표현 보정",
     "runtime": "client",
     "capabilities": ["full_page_access"],

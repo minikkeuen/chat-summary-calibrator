@@ -37,6 +37,14 @@ assert.deepEqual(plain(core.selectOverlapMessages(snapshot, range, 2).map((row) 
 assert.deepEqual(plain(core.selectOverlapMessages(snapshot, range, 9).map((row) => row.id)), ["m1", "m2", "m3", "m4", "m5", "m6"]);
 
 const quality = { ...core.DEFAULT_SETTINGS, referenceCount: 2, overlapEnabled: true, overlapTurns: 2, dedupEnabled: true, summaryPrompt: "사용자 정의 지침" };
+const enginePromptContent = `You are Automatic Chat Summary. Summarize only NEW durable roleplay events not already captured in the existing summary.
+Focus on plot turns, character developments, relationships, current situation, locations, quests, goals, threats, and unresolved tension.
+Write an appendable continuation. Do not rewrite or repeat the previous summary. If nothing durable changed, return an empty summary. Match the existing summary style.`;
+assert.ok(core.DEFAULT_PROMPT.startsWith(`${enginePromptContent}\n`), "The Engine default content instructions stay intact");
+assert.match(core.DEFAULT_PROMPT, /Return only the summary text, without a title, JSON, code fences, or explanation\./);
+const oldDefault = "당신은 RP 대화의 신규 사건을 기록하는 요약자입니다. 실제 행동·발언·결과·관계 변화를 시간순으로 간결하고 정확하게 기록하세요. 추측이나 단정적인 성격 평가를 새 사실처럼 쓰지 마세요. 설명이나 코드 블록 없이 요약 본문만 출력하세요.";
+assert.equal(core.settingsFromStorage(core.storagePatch({ summaryPrompt: oldDefault })).summaryPrompt, core.DEFAULT_PROMPT);
+assert.equal(core.settingsFromStorage(core.storagePatch({ summaryPrompt: "사용자 정의 지침" })).summaryPrompt, "사용자 정의 지침");
 const generatedPrompt = core.buildManualPrompt(snapshot, range, quality);
 assert.ok(generatedPrompt[0].content.includes("사용자 정의 지침"));
 assert.ok(generatedPrompt[0].content.includes("반복된 행동만으로"));

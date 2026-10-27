@@ -200,6 +200,14 @@ for (const settings of [quality([file("none", "x")]), quality([file("과도한",
   const part = (name) => root.parts[`.msc-${name}`];
   const savedFiles = () => stored[core.STORAGE_KEY].settings.ruleFiles;
   await waitFor(() => !part("correction-enabled").disabled);
+  assert.equal(part("rule-list").children.length, 3, "Bundled defaults appear in the existing rule list");
+  assert.deepEqual(savedFiles().map(file => file.name), ["regex_ko.csv", "regex_en.csv", "regex_all.csv"]);
+  // Delete the defaults through the real controls before testing a custom upload-only configuration.
+  for (let count = 2; count >= 0; count -= 1) {
+    part("rule-list").emit("click", { target: { getAttribute: key => key === "data-rule-delete" ? "0" : null } });
+    await waitFor(() => savedFiles().length === count);
+  }
+  assert.equal(core.settingsFromStorage(stored).ruleFiles.length, 0, "Deleted defaults stay deleted after reload");
   assert.equal(part("rule-options").hidden, true);
   part("rule-open").emit("click"); assert.equal(part("rule-upload").clicked, true);
   const upload = (name, text) => { part("rule-upload").files = [{ name, size: Buffer.byteLength(text), text: async () => text }]; part("rule-upload").emit("change"); };

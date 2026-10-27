@@ -5,14 +5,179 @@ const __MCS_PHASE1_CORE__ = (() => {
   const PAGE_SIZE = 200;
   const MAX_ATTEMPTS = 3;
   const MUTATION_HEADERS = Object.freeze({ "Content-Type": "application/json", "x-marinara-csrf": "1" });
-  const DEFAULT_PROMPT = "당신은 RP 대화의 신규 사건을 기록하는 요약자입니다. 실제 행동·발언·결과·관계 변화를 시간순으로 간결하고 정확하게 기록하세요. 추측이나 단정적인 성격 평가를 새 사실처럼 쓰지 마세요. 설명이나 코드 블록 없이 요약 본문만 출력하세요.";
+  const LEGACY_DEFAULT_PROMPT = "당신은 RP 대화의 신규 사건을 기록하는 요약자입니다. 실제 행동·발언·결과·관계 변화를 시간순으로 간결하고 정확하게 기록하세요. 추측이나 단정적인 성격 평가를 새 사실처럼 쓰지 마세요. 설명이나 코드 블록 없이 요약 본문만 출력하세요.";
+  const DEFAULT_PROMPT = `You are Automatic Chat Summary. Summarize only NEW durable roleplay events not already captured in the existing summary.
+Focus on plot turns, character developments, relationships, current situation, locations, quests, goals, threats, and unresolved tension.
+Write an appendable continuation. Do not rewrite or repeat the previous summary. If nothing durable changed, return an empty summary. Match the existing summary style.
+Return only the summary text, without a title, JSON, code fences, or explanation.`;
   const SCOPE_PROMPT = "반드시 '신규 요약 대상'에 있는 메시지만 새 요약의 근거로 사용하세요. 기존 요약과 오버랩은 이해를 돕는 참고 문맥이며 새 사건처럼 다시 요약하거나 기존 요약 전체를 재작성하지 마세요. 실제 저장 출처는 프롬프트와 무관하게 애드온이 선택한 신규 메시지로만 정합니다.";
   const DEDUP_PROMPT = "이전 요약에 이미 기록된 사실을 불필요하게 반복하지 마세요. 동일한 성격·감정·관계 묘사를 거듭 강조하지 마세요. 반복된 행동만으로 성격이나 감정이 더 극단적으로 변했다고 해석하지 마세요. 새로운 사건·행동·결과·관계 변화는 기록하고, 기존 사실에 실질적 변화가 생기면 그 변화를 기록하세요. 오버랩은 참고 문맥일 뿐입니다. 중복 억제를 이유로 중요한 신규 사건을 누락하지 마세요. 기존 요약은 재작성하지 말고 신규 내용만 생성하세요.";
-  const DEFAULT_SETTINGS = Object.freeze({ connectionId: "", intervalTurns: 5, managedChats: Object.freeze({}), referenceCount: 3, overlapEnabled: false, overlapTurns: 2, dedupEnabled: true, summaryPrompt: DEFAULT_PROMPT, correctionEnabled: false, ruleFiles: Object.freeze([]) });
+  // BEGIN BUNDLED RULES (generated from rules/regex_*.csv by build-package.mjs)
+  const DEFAULT_RULE_FILES = [
+    {"id":"default-regex_ko.csv","name":"regex_ko.csv","type":"regex","language":"ko","enabled":true, "rules": [
+      {"find":"(?:깊어지는|커져가는|강해지는|심해지는)\\s*집착","replace":"애착"},
+      {"find":"(?:걷잡을 수 없는|주체할 수 없는|억누를 수 없는|참을 수 없는|극심한|강렬한|압도적인|격렬한|과도한|지나친|맹목적인|광적인|병적인)\\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|집착심|소유욕|독점욕|지배욕|통제욕|떨림)\\b)","replace":""},
+      {"find":"(?:점점|갈수록|더욱|한층)\\s*(?:깊어지는|커지는|커져가는|강해지는|심해지는)\\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|소유욕|독점욕|지배욕|통제욕)\\b)","replace":""},
+      {"find":"집착에 사로잡힌","replace":"강한 관심을 가진"},
+      {"find":"집착에 사로잡혀","replace":"강한 관심을 가지고"},
+      {"find":"집착하지 않았다","replace":"강한 관심을 갖지 않았다"},
+      {"find":"집착하지 않는","replace":"강한 관심을 갖지 않는"},
+      {"find":"집착했다","replace":"강한 관심을 가졌다"},
+      {"find":"집착하는","replace":"강한 관심을 갖는"},
+      {"find":"집착하며","replace":"강한 관심을 가지며"},
+      {"find":"집착하려","replace":"강한 관심을 가지려"},
+      {"find":"집착하다","replace":"강한 관심을 갖다"},
+      {"find":"집착심","replace":"강한 관심"},
+      {"find":"집착","replace":"강한 관심"},
+      {"find":"소유욕","replace":"곁에 두고 싶은 마음"},
+      {"find":"독점욕","replace":"독점하고 싶은 마음"},
+      {"find":"지배욕","replace":"주도하고 싶은 마음"},
+      {"find":"통제욕","replace":"상황을 주도하려는 마음"},
+      {"find":"통제하려","replace":"주도하려"},
+      {"find":"강압적으로","replace":"강하게"},
+      {"find":"강압적인","replace":"강한"},
+      {"find":"복종했다","replace":"요구를 따랐다"},
+      {"find":"복종하는","replace":"요구를 따르는"},
+      {"find":"복종하며","replace":"요구를 따르며"},
+      {"find":"복종하다","replace":"요구를 따르다"},
+      {"find":"복종","replace":"요구를 따름"},
+      {"find":"굴복했다","replace":"물러섰다"},
+      {"find":"굴복하는","replace":"물러서는"},
+      {"find":"굴복하며","replace":"물러서며"},
+      {"find":"굴복하다","replace":"물러서다"},
+      {"find":"굴복","replace":"물러남"},
+      {"find":"강박적으로","replace":"반복해서"},
+      {"find":"강박적인","replace":"지나치게 신경 쓰는"},
+      {"find":"경외심","replace":"존경심"},
+      {"find":"숭배심","replace":"존경심"},
+      {"find":"보호 본능","replace":"보호하려는 마음"},
+      {"find":"인내심 있게 지켜봤다","replace":"계속 지켜봤다"},
+      {"find":"권력 다툼","replace":"의견 충돌"},
+      {"find":"신뢰의 첫걸음","replace":"신뢰를 보인 행동"}
+    ]},
+    {"id":"default-regex_en.csv","name":"regex_en.csv","type":"regex","language":"en","enabled":true, "rules": [
+      {"find":"\\b(?:overwhelming|intense|extreme|unbearable|desperate|uncontrollable|all-consuming|fanatical|pathological)\\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|shaking|trembling)\\b)","replace":""},
+      {"find":"\\b(?:ever-growing|deepening|increasing|mounting|growing|intensifying)\\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|bond|intimacy)\\b)","replace":""},
+      {"find":"\\bobsession with\\b","replace":"strong interest in"},
+      {"find":"\\bobsessed with\\b","replace":"strongly interested in"},
+      {"find":"\\bobsession\\b","replace":"strong interest"},
+      {"find":"\\bobsessive attachment\\b","replace":"strong attachment"},
+      {"find":"\\bobsessive\\b","replace":"strongly interested"},
+      {"find":"\\bfixated on\\b","replace":"focused on"},
+      {"find":"\\bfixation on\\b","replace":"strong interest in"},
+      {"find":"\\bfixation\\b","replace":"strong interest"},
+      {"find":"\\bpossessive of\\b","replace":"attached to"},
+      {"find":"\\bpossessive feelings\\b","replace":"desire for closeness"},
+      {"find":"\\bpossessive desire\\b","replace":"desire for closeness"},
+      {"find":"\\bpossessiveness\\b","replace":"desire for closeness"},
+      {"find":"\\bdesire to monopolize\\b","replace":"desire for exclusivity"},
+      {"find":"\\bdesire for dominance\\b","replace":"desire to take the lead"},
+      {"find":"\\bneed for control\\b","replace":"desire to direct events"},
+      {"find":"\\bdesire to control\\b","replace":"desire to direct"},
+      {"find":"\\breluctant submission\\b","replace":"reluctant compliance"},
+      {"find":"\\bsubmission to\\b","replace":"compliance with"},
+      {"find":"\\bsubmission\\b","replace":"compliance"},
+      {"find":"\\bsubmissive attitude\\b","replace":"compliant attitude"},
+      {"find":"\\bsurrendered to\\b","replace":"yielded to"},
+      {"find":"\\bact of surrender\\b","replace":"act of yielding"},
+      {"find":"\\bcoercive attitude\\b","replace":"forceful attitude"},
+      {"find":"\\bcoercive atmosphere\\b","replace":"tense atmosphere"},
+      {"find":"\\bcoercive dynamic\\b","replace":"tense interaction"},
+      {"find":"\\bcoercively\\b","replace":"forcefully"},
+      {"find":"\\bbrooded over\\b","replace":"thought about"},
+      {"find":"\\brare moment of honesty\\b","replace":"moment of honesty"},
+      {"find":"\\bpatient observation\\b","replace":"observation"},
+      {"find":"\\bprotective instinct\\b","replace":"desire to protect"},
+      {"find":"\\bpower struggle\\b","replace":"disagreement"},
+      {"find":"\\bdeepening bond\\b","replace":"bond"},
+      {"find":"\\bgrowing intimacy\\b","replace":"intimacy"}
+    ]},
+    {"id":"default-regex_all.csv","name":"regex_all.csv","type":"regex","language":"all","enabled":false, "rules": [
+      {"find":"(?:깊어지는|커져가는|강해지는|심해지는)\\s*집착","replace":"애착"},
+      {"find":"(?:걷잡을 수 없는|주체할 수 없는|억누를 수 없는|참을 수 없는|극심한|강렬한|압도적인|격렬한|과도한|지나친|맹목적인|광적인|병적인)\\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|집착심|소유욕|독점욕|지배욕|통제욕|떨림)\\b)","replace":""},
+      {"find":"(?:점점|갈수록|더욱|한층)\\s*(?:깊어지는|커지는|커져가는|강해지는|심해지는)\\s*(?=(?:공포|두려움|불안|질투|분노|갈망|욕망|애정|사랑|애착|집착|소유욕|독점욕|지배욕|통제욕)\\b)","replace":""},
+      {"find":"집착에 사로잡힌","replace":"강한 관심을 가진"},
+      {"find":"집착에 사로잡혀","replace":"강한 관심을 가지고"},
+      {"find":"집착하지 않았다","replace":"강한 관심을 갖지 않았다"},
+      {"find":"집착하지 않는","replace":"강한 관심을 갖지 않는"},
+      {"find":"집착했다","replace":"강한 관심을 가졌다"},
+      {"find":"집착하는","replace":"강한 관심을 갖는"},
+      {"find":"집착하며","replace":"강한 관심을 가지며"},
+      {"find":"집착하려","replace":"강한 관심을 가지려"},
+      {"find":"집착하다","replace":"강한 관심을 갖다"},
+      {"find":"집착심","replace":"강한 관심"},
+      {"find":"집착","replace":"강한 관심"},
+      {"find":"소유욕","replace":"곁에 두고 싶은 마음"},
+      {"find":"독점욕","replace":"독점하고 싶은 마음"},
+      {"find":"지배욕","replace":"주도하고 싶은 마음"},
+      {"find":"통제욕","replace":"상황을 주도하려는 마음"},
+      {"find":"통제하려","replace":"주도하려"},
+      {"find":"강압적으로","replace":"강하게"},
+      {"find":"강압적인","replace":"강한"},
+      {"find":"복종했다","replace":"요구를 따랐다"},
+      {"find":"복종하는","replace":"요구를 따르는"},
+      {"find":"복종하며","replace":"요구를 따르며"},
+      {"find":"복종하다","replace":"요구를 따르다"},
+      {"find":"복종","replace":"요구를 따름"},
+      {"find":"굴복했다","replace":"물러섰다"},
+      {"find":"굴복하는","replace":"물러서는"},
+      {"find":"굴복하며","replace":"물러서며"},
+      {"find":"굴복하다","replace":"물러서다"},
+      {"find":"굴복","replace":"물러남"},
+      {"find":"강박적으로","replace":"반복해서"},
+      {"find":"강박적인","replace":"지나치게 신경 쓰는"},
+      {"find":"경외심","replace":"존경심"},
+      {"find":"숭배심","replace":"존경심"},
+      {"find":"보호 본능","replace":"보호하려는 마음"},
+      {"find":"인내심 있게 지켜봤다","replace":"계속 지켜봤다"},
+      {"find":"권력 다툼","replace":"의견 충돌"},
+      {"find":"신뢰의 첫걸음","replace":"신뢰를 보인 행동"},
+      {"find":"\\b(?:overwhelming|intense|extreme|unbearable|desperate|uncontrollable|all-consuming|fanatical|pathological)\\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|shaking|trembling)\\b)","replace":""},
+      {"find":"\\b(?:ever-growing|deepening|increasing|mounting|growing|intensifying)\\s+(?=(?:fear|jealousy|anxiety|longing|desire|affection|attachment|obsession|possessiveness|fixation|bond|intimacy)\\b)","replace":""},
+      {"find":"\\bobsession with\\b","replace":"strong interest in"},
+      {"find":"\\bobsessed with\\b","replace":"strongly interested in"},
+      {"find":"\\bobsession\\b","replace":"strong interest"},
+      {"find":"\\bobsessive attachment\\b","replace":"strong attachment"},
+      {"find":"\\bobsessive\\b","replace":"strongly interested"},
+      {"find":"\\bfixated on\\b","replace":"focused on"},
+      {"find":"\\bfixation on\\b","replace":"strong interest in"},
+      {"find":"\\bfixation\\b","replace":"strong interest"},
+      {"find":"\\bpossessive of\\b","replace":"attached to"},
+      {"find":"\\bpossessive feelings\\b","replace":"desire for closeness"},
+      {"find":"\\bpossessive desire\\b","replace":"desire for closeness"},
+      {"find":"\\bpossessiveness\\b","replace":"desire for closeness"},
+      {"find":"\\bdesire to monopolize\\b","replace":"desire for exclusivity"},
+      {"find":"\\bdesire for dominance\\b","replace":"desire to take the lead"},
+      {"find":"\\bneed for control\\b","replace":"desire to direct events"},
+      {"find":"\\bdesire to control\\b","replace":"desire to direct"},
+      {"find":"\\breluctant submission\\b","replace":"reluctant compliance"},
+      {"find":"\\bsubmission to\\b","replace":"compliance with"},
+      {"find":"\\bsubmission\\b","replace":"compliance"},
+      {"find":"\\bsubmissive attitude\\b","replace":"compliant attitude"},
+      {"find":"\\bsurrendered to\\b","replace":"yielded to"},
+      {"find":"\\bact of surrender\\b","replace":"act of yielding"},
+      {"find":"\\bcoercive attitude\\b","replace":"forceful attitude"},
+      {"find":"\\bcoercive atmosphere\\b","replace":"tense atmosphere"},
+      {"find":"\\bcoercive dynamic\\b","replace":"tense interaction"},
+      {"find":"\\bcoercively\\b","replace":"forcefully"},
+      {"find":"\\bbrooded over\\b","replace":"thought about"},
+      {"find":"\\brare moment of honesty\\b","replace":"moment of honesty"},
+      {"find":"\\bpatient observation\\b","replace":"observation"},
+      {"find":"\\bprotective instinct\\b","replace":"desire to protect"},
+      {"find":"\\bpower struggle\\b","replace":"disagreement"},
+      {"find":"\\bdeepening bond\\b","replace":"bond"},
+      {"find":"\\bgrowing intimacy\\b","replace":"intimacy"}
+    ]}
+  ];
+  // END BUNDLED RULES
+  for (const file of DEFAULT_RULE_FILES) { file.rules.forEach(Object.freeze); Object.freeze(file.rules); Object.freeze(file); }
+  Object.freeze(DEFAULT_RULE_FILES);
+  const defaultRuleFiles = () => DEFAULT_RULE_FILES.map(file => ({ ...file, rules: file.rules.map(rule => ({ ...rule })) }));
+  const DEFAULT_SETTINGS = Object.freeze({ connectionId: "", intervalTurns: 5, managedChats: Object.freeze({}), referenceCount: 3, overlapEnabled: false, overlapTurns: 2, dedupEnabled: true, summaryPrompt: DEFAULT_PROMPT, correctionEnabled: false, ruleFiles: DEFAULT_RULE_FILES, defaultRulesVersion: 1 });
 
   function settingsFromStorage(record) {
     const value = record && record[STORAGE_KEY];
-    if (value == null) return { ...DEFAULT_SETTINGS };
+    if (value == null) return { ...DEFAULT_SETTINGS, ruleFiles: defaultRuleFiles() };
     if (!value || typeof value !== "object" || value.schemaVersion !== 1 || !value.settings || typeof value.settings !== "object") {
       throw new Error("저장된 설정 형식을 알 수 없습니다. 설정을 변경하지 않았습니다.");
     }
@@ -31,9 +196,11 @@ const __MCS_PHASE1_CORE__ = (() => {
       overlapEnabled: raw.overlapEnabled === true,
       overlapTurns: Number.isInteger(raw.overlapTurns) && raw.overlapTurns >= 0 && raw.overlapTurns <= 50 ? raw.overlapTurns : 2,
       dedupEnabled: raw.dedupEnabled !== false,
-      summaryPrompt: typeof raw.summaryPrompt === "string" && raw.summaryPrompt.trim() && raw.summaryPrompt.length <= 12000 ? raw.summaryPrompt : DEFAULT_PROMPT,
+      summaryPrompt: typeof raw.summaryPrompt === "string" && raw.summaryPrompt.trim() && raw.summaryPrompt.length <= 12000 && raw.summaryPrompt !== LEGACY_DEFAULT_PROMPT ? raw.summaryPrompt : DEFAULT_PROMPT,
       correctionEnabled: raw.correctionEnabled === true,
-      ruleFiles: Array.isArray(raw.ruleFiles) ? raw.ruleFiles : [],
+      // Seed only unconfigured old settings. A saved empty list after deletion stays empty.
+      ruleFiles: Array.isArray(raw.ruleFiles) && (raw.ruleFiles.length || raw.defaultRulesVersion === 1) ? raw.ruleFiles : defaultRuleFiles(),
+      defaultRulesVersion: 1,
       ...(raw.presetState && typeof raw.presetState === "object" && !Array.isArray(raw.presetState) ? { presetState: raw.presetState } : {}),
     };
   }
