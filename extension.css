@@ -1,0 +1,67 @@
+#marinara-chat-summary-calibrator { font: 13px/1.5 system-ui, sans-serif; color: var(--foreground, #e8e8e8); }
+#marinara-chat-summary-calibrator * { box-sizing: border-box; }
+#marinara-chat-summary-calibrator > .msc-launcher { display: none; }
+#marinara-chat-summary-calibrator-launcher { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted-foreground, #aaa); cursor: pointer; }
+#marinara-chat-summary-calibrator-launcher:hover { background: var(--secondary, #8882); color: var(--foreground, #e8e8e8); }
+#marinara-chat-summary-calibrator .msc-panel { position: fixed; right: 18px; top: 58px; z-index: 1000; display: flex; flex-direction: column; width: min(380px, calc(100vw - 36px)); max-height: calc(100dvh - 76px); overflow: hidden; border: 1px solid #7778; border-radius: 12px; padding: 0; background: var(--background, #25252a); color: inherit; box-shadow: 0 8px 30px #0008; }
+#marinara-chat-summary-calibrator .msc-panel[hidden] { display: none; }
+#marinara-chat-summary-calibrator .msc-header, #marinara-chat-summary-calibrator .msc-row, #marinara-chat-summary-calibrator .msc-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+#marinara-chat-summary-calibrator .msc-header { position: relative; z-index: 1; display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 42px; margin: 0; padding: 5px 12px 5px 16px; background: var(--background, #25252a); border-bottom: 1px solid #7774; font-size: 15px; cursor: move; touch-action: none; user-select: none; }
+#marinara-chat-summary-calibrator .msc-body { min-height: 0; overflow: auto; padding: 0 16px 16px; overscroll-behavior: contain; }
+#marinara-chat-summary-calibrator button, #marinara-chat-summary-calibrator select, #marinara-chat-summary-calibrator input, #marinara-chat-summary-calibrator textarea { font: inherit; }
+#marinara-chat-summary-calibrator .msc-panel button, #marinara-chat-summary-calibrator select, #marinara-chat-summary-calibrator input[type=number] { border: 1px solid #7778; border-radius: 7px; padding: 6px 8px; background: var(--background, #25252a); color: inherit; }
+#marinara-chat-summary-calibrator .msc-panel button:not(:disabled), #marinara-chat-summary-calibrator select:not(:disabled), #marinara-chat-summary-calibrator input:not(:disabled) { cursor: pointer; }
+#marinara-chat-summary-calibrator button:disabled { opacity: .55; cursor: not-allowed; }
+#marinara-chat-summary-calibrator .msc-panel .msc-close { display: grid; place-items: center; width: 26px; height: 26px; padding: 4px; border: 0; background: transparent; font-size: 18px; line-height: 1; }
+#marinara-chat-summary-calibrator .msc-note { margin: 10px 0; padding: 8px; border-radius: 6px; background: #8882; }
+#marinara-chat-summary-calibrator .msc-field { display: grid; gap: 4px; margin-top: 12px; }
+#marinara-chat-summary-calibrator .msc-field input, #marinara-chat-summary-calibrator .msc-field select { width: 100%; }
+#marinara-chat-summary-calibrator small { display: block; opacity: .75; margin-top: 4px; }
+#marinara-chat-summary-calibrator .msc-actions { margin-top: 14px; }
+#marinara-chat-summary-calibrator .msc-status { margin-top: 14px; padding: 9px; border-radius: 6px; background: #8882; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-box { margin-top: 12px; border: 1px solid #7776; border-radius: 9px; padding: 10px; }
+#marinara-chat-summary-calibrator .msc-box-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+#marinara-chat-summary-calibrator .msc-box-header { cursor: pointer; padding: 3px 0; }
+#marinara-chat-summary-calibrator .msc-box:has([aria-expanded=false]) { cursor: pointer; }
+#marinara-chat-summary-calibrator .msc-box-header:focus-visible { outline: 2px solid var(--primary, #a78bfa); outline-offset: 4px; border-radius: 3px; }
+#marinara-chat-summary-calibrator .msc-advanced[hidden], #marinara-chat-summary-calibrator .msc-work[hidden], #marinara-chat-summary-calibrator .msc-bulk[hidden] { display: none; }
+#marinara-chat-summary-calibrator .msc-work { padding-top: 9px; }
+#marinara-chat-summary-calibrator .msc-error:not(:empty) { margin-bottom: 8px; color: var(--destructive, #ed9090); overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-details { white-space: pre-wrap; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-advanced-row { margin-top: 12px; }
+#marinara-chat-summary-calibrator .msc-field textarea { width: 100%; min-height: 112px; resize: vertical; border: 1px solid #7778; border-radius: 7px; padding: 7px 8px; background: var(--background, #25252a); color: inherit; }
+#marinara-chat-summary-calibrator .msc-reset-prompt { margin-top: 7px; }
+#marinara-chat-summary-calibrator .msc-correction h3, #marinara-chat-summary-calibrator .msc-bulk-section h3 { margin: 0 0 8px; font-size: 13px; font-weight: 650; }
+#marinara-chat-summary-calibrator .msc-bulk-section, #marinara-chat-summary-calibrator .msc-rule-test { margin-top: 14px; padding-top: 12px; border-top: 1px solid #7774; }
+#marinara-chat-summary-calibrator .msc-rule-test > summary { cursor: pointer; font-weight: 650; }
+#marinara-chat-summary-calibrator .msc-rule-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#marinara-chat-summary-calibrator .msc-rule-options[hidden] { display: none; }
+#marinara-chat-summary-calibrator .msc-rule-open, #marinara-chat-summary-calibrator .msc-rule-preview { margin-top: 8px; }
+#marinara-chat-summary-calibrator .msc-rule-notice, #marinara-chat-summary-calibrator .msc-rule-preview-status { white-space: pre-wrap; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-rule-notice:not(:empty) { margin-top: 8px; }
+#marinara-chat-summary-calibrator .msc-rule-list { margin-top: 8px; }
+#marinara-chat-summary-calibrator .msc-rule-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #7773; }
+#marinara-chat-summary-calibrator .msc-rule-item label { display: flex; align-items: flex-start; gap: 6px; flex: 1; min-width: 0; }
+#marinara-chat-summary-calibrator .msc-rule-item span { white-space: pre-wrap; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-rule-item button { flex: 0 0 auto; }
+#marinara-chat-summary-calibrator .msc-bulk { padding-top: 8px; }
+#marinara-chat-summary-calibrator .msc-bulk-load { margin-top: 8px; }
+#marinara-chat-summary-calibrator .msc-bulk-select { margin-top: 10px; }
+#marinara-chat-summary-calibrator .msc-bulk-list { max-height: 220px; overflow: auto; margin-top: 6px; }
+#marinara-chat-summary-calibrator .msc-bulk-choice { display: flex; align-items: flex-start; gap: 7px; padding: 7px 0; border-bottom: 1px solid #7773; }
+#marinara-chat-summary-calibrator .msc-bulk-choice span { white-space: pre-wrap; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-bulk-result { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 10px; }
+#marinara-chat-summary-calibrator .msc-bulk-item { margin-top: 8px; border: 1px solid #7774; border-radius: 6px; padding: 8px; }
+#marinara-chat-summary-calibrator .msc-bulk-item summary { cursor: pointer; overflow-wrap: anywhere; }
+#marinara-chat-summary-calibrator .msc-bulk-item strong { display: block; margin-top: 8px; font-size: 12px; }
+#marinara-chat-summary-calibrator .msc-bulk-item pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; margin: 4px 0 0; padding: 7px; border-radius: 4px; background: #8881; }
+#marinara-chat-summary-calibrator .msc-diff-old { background: #e0525233; text-decoration: line-through; }
+#marinara-chat-summary-calibrator .msc-diff-new { background: #38b76b40; }
+#marinara-chat-summary-calibrator .msc-bulk-warning { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--destructive, #ed9090); margin: 8px 0 0; }
+
+#marinara-chat-summary-calibrator .msc-memory h3 { margin: 12px 0 6px; font-size: 13px; font-weight: 650; }
+#marinara-chat-summary-calibrator .msc-memory-semantic { margin-top: 12px; }
+#marinara-chat-summary-calibrator .msc-memory-status:not(:empty) { overflow-wrap: anywhere; }
+
+#marinara-chat-summary-calibrator .msc-preset { margin-top: 14px; padding-top: 10px; border-top: 1px solid #7774; }
+#marinara-chat-summary-calibrator .msc-preset .msc-row + .msc-row { margin-top: 8px; }
